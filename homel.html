@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha o Nível de Ensino</title>
+    <link rel="stylesheet" href="home.css">
+    <script type="module" src="home.js"></script>
+    <style>
+        /* Estilo para os links dentro da form-group */
+        .form-group a {
+            display: block; /* Faz os links ocuparem toda a largura e ficarem um abaixo do outro */
+            margin-bottom: 10px; /* Espaçamento entre os links */
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="name"></div>
+        <h1>Escolha o Nível de Ensino</h1>
+        <button onclick="window.location.href = 'primario.html';">Ensino Primário</button>
+        <button onclick="window.location.href = 'secundario.html';">Ensino Secundário</button>
+        <button onclick="window.location.href = 'anexos.html';">Criar apontamentos</button>
+        <button onclick="window.location.href = 'error.html';">Plano rapido e completo em 1 minuto</button>
+        <div id="expira"></div>
+
+        <div class="logout">
+            <a href="logout.html"style="text-decoration: underline;">Terminar sessão</a>
+        </div>
+        <div class="form-group">
+            <a href="pagamento3.html">
+                Mude o seu plano mensal para plano anual por 450,00MT
+            </a>
+            <a href="pagamento4.html">
+                Mude o seu plano actual para plano INFINITO por 2000,00MT
+            </a>
+        </div>
+
+        <div class="admin">
+            <a href="admin.html" style="color: yellow; text-decoration: none; cursor: pointer;">
+                Admin?
+            </a>
+        </div>
+
+        <button id="chatButton" onclick="window.location.href = 'chat.html';">
+            <img src="Chat.png" alt="Chat">
+        </button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecionamento</title>
+</head>
+<style>
+    /* Estilos gerais */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        background-image: linear-gradient(to right, #4facfe, #00f2fe);
+        overflow: auto;
+        min-height: 100vh;
+    }
+</style>
+<body>
+    <h1>Aguarde, estamos verificando seu plano...</h1>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configurações do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // Função para verificar o estado de autenticação e carregar o plano
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                console.log("Usuário não logado. Redirecionando para index.html.");
+                window.location.href = "./index.html";  // Redireciona se o usuário não estiver logado
+            } else {
+                console.log("Usuário logado:", user.email);
+                await checkPlano(user);  // Verifica o plano do usuário e faz o redirecionamento
+            }
+        });
+
+        // Função para verificar o campo 'plano' e redirecionar conforme necessário
+        async function checkPlano(user) {
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                const plano = userData.plano;  // O campo plano
+
+                // Se o campo 'plano' não for "mensal"
+                if (plano && plano !== "mensal") {
+                    console.log("Plano diferente de mensal, redirecionando para https://planoautomatico.vercel.app");
+                    window.location.href = "https://planoautomatico.vercel.app";  // Redireciona para o link fornecido
+                }
+                // Se o campo 'plano' não existir ou contiver valor "mensal"
+                else {
+                    // Cria o campo 'plano' com o valor "mensal" caso ele não exista
+                    if (!plano) {
+                        await setDoc(userRef, { plano: "mensal" }, { merge: true });
+                        console.log("Campo 'plano' não encontrado. Criado como 'mensal'.");
+                    }
+
+                    alert("Por favor, mude o seu plano actual para o PLANO ANUAL ou INFINITO para ter acesso ao plano rapido e completo em 1 minuto.");
+                    window.location.href = "homel.html";  // Redireciona para home.html após o alerta
+                }
+            } else {
+                console.error("Erro: Usuário não encontrado no Firestore.");
+                window.location.href = "./index.html";  // Redireciona caso o documento do usuário não exista
+            }
+        }
+    </script>
+</body>
+</html>

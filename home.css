@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(to right, #4facfe, #00f2fe);
+    background-size: 100%;
+    background-position: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    position: relative; /* Para permitir o posicionamento absoluto do botão */
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.whatsapp-link, .youtube-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid;
+    text-align: center;
+    margin: 10px;
+}
+
+.whatsapp-link {
+    background-color: #25D366;
+    color: white;
+    border-color: #25D366;
+}
+
+.whatsapp-link:hover {
+    background-color: #128C7E;
+    border-color: #128C7E;
+}
+
+.youtube-link {
+    background-color: #FF0000;
+    color: white;
+    border-color: #FF0000;
+}
+
+.youtube-link:hover {
+    background-color: #CC0000;
+    border-color: #CC0000;
+}
+
+#accessCount {
+    font-size: 12px; /* Tamanho menor da fonte */
+    margin-top: 20px;
+    color: #333;
+    white-space: nowrap; /* Para evitar quebra de linha */
+}
+
+/* Estilo do botão de chat */
+#chatButton {
+    position: absolute; /* Posiciona o botão no container */
+    bottom: 1px;
+    right: 30px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#chatButton img {
+    width: 30px;
+    height: 30px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(to right, #4facfe, #00f2fe);
+    background-size: 100%;
+    background-position: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    position: relative; /* Permite o posicionamento absoluto do botão "SAIR" */
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.whatsapp-link, .youtube-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid;
+    text-align: center;
+    margin: 10px;
+}
+
+.whatsapp-link {
+    background-color: #25D366;
+    color: white;
+    border-color: #25D366;
+}
+
+.whatsapp-link:hover {
+    background-color: #128C7E;
+    border-color: #128C7E;
+}
+
+.youtube-link {
+    background-color: #FF0000;
+    color: white;
+    border-color: #FF0000;
+}
+
+.youtube-link:hover {
+    background-color: #CC0000;
+    border-color: #CC0000;
+}
+
+#accessCount {
+    font-size: 12px; /* Tamanho menor da fonte */
+    margin-top: 20px;
+    color: #333;
+    white-space: nowrap; /* Para evitar quebra de linha */
+}
+
+/* Estilo do botão de chat */
+#chatButton {
+    position: absolute; /* Posiciona o botão no container */
+    bottom: 1px;
+    right: 30px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#chatButton img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Estilo para o link "SAIR" no canto superior direito */
+.logout {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.logout a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF0000;
+    text-decoration: none;
+}
+
+.logout a:hover {
+    color: #CC0000;
+}

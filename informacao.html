@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+        }
+        .form-group input {
+            width: 97%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configurações do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // Verifica o estado de autenticação do usuário
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("Usuário não logado. Redirecionando para index.html.");
+                window.location.href = "./index.html";  // Redireciona se o usuário não estiver logado
+            } else {
+                console.log("Usuário logado:", user.email);
+                setupForm(user);  // Configura o formulário para o usuário logado
+            }
+        });
+
+        // Função para configurar o formulário
+        function setupForm(user) {
+            const saveButton = document.getElementById('saveButton');
+            const informacaoInput = document.getElementById('informacao');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Ao clicar no botão "Salvar"
+            saveButton.onclick = async () => {
+                const informacao = informacaoInput.value.trim();
+
+                try {
+                    // Atualiza o campo 'informacao' no documento do usuário no Firestore
+                    const userRef = doc(db, "users", user.uid);
+
+                    if (informacao === "") {
+                        // Se o campo estiver vazio, faz uma atualização para remover a informação
+                        await updateDoc(userRef, {
+                            informacao: ""  // Limpa o campo 'informacao'
+                        });
+                        statusMessage.textContent = "Informação apagada com sucesso!";
+                    } else {
+                        // Se houver algum valor, salva a informação normalmente
+                        await updateDoc(userRef, {
+                            informacao: informacao  // Atualiza o campo 'informacao'
+                        });
+                        statusMessage.textContent = "Informação salva com sucesso!";
+                    }
+
+                    statusMessage.style.color = "green";
+                    informacaoInput.value = '';  // Limpa o campo de texto após salvar
+                } catch (error) {
+                    console.error("Erro ao salvar a informação:", error);
+                    statusMessage.textContent = "Ocorreu um erro ao salvar a informação.";
+                    statusMessage.style.color = "red";
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Vitrina</h1>
+        <div class="form-group">
+            <input type="text" id="informacao" placeholder="Digite a sua informacao">
+        </div>
+        <div class="form-group">
+            <button id="saveButton">Salvar</button>
+        </div>
+        <div class="status" id="statusMessage"></div>
+    </div>
+</body>
+</html>

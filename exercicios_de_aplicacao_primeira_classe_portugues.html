@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Aula</title>
+    <link rel="stylesheet" href="exercicios_de_aplicacao.css">
+    <script src="exercicios_de_aplicacao.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form id="lessonPlanForm">
+            <div class="input-container">
+                <div>
+<label for="escola">Escola (Obrigatório):</label>
+<input type="text" id="escola" name="escola" placeholder="Escreve o nome da escola" required>
+
+<label for="data">Data (Obrigatório):</label>
+<input type="date" id="data" name="data" required>
+<label for="nome">Nome (Obrigatório):</label>
+<input type="text" id="nome" name="nome" placeholder="Preencha o nome do professor" required>
+<label for="disciplina">Disciplina:</label>
+<div id="disciplina">
+    <select name="disciplina" required>
+        <option>Português</option>
+    </select>
+    <select name="classe" required>
+        <option>1ª Classe</option>
+    </select>
+    <select name="turma" required>
+        <option value="">Selecione a Turma (Obrigatório)</option>
+        <option>Turma: A</option>
+        <option>Turma: B</option>
+        <option>Turma: C</option>
+        <option>Turma: D</option>
+        <option>Turma: E</option>
+        <option>Turma: F</option>
+        <option>Turma: G</option>
+        <option>Turma: H</option>
+        <option>Turma: I</option>
+        <option>Turma: J</option>
+        <option>Turma: K</option>
+        <option>Turma: L</option>
+        <option>Turma: M</option>
+        <option>Turma: N</option>
+        <option>Turma: O</option>
+        <option>Turma: P</option>
+        <option>Turma: Q</option>
+        <option>Turma: R</option>
+        <option>Turma: S</option>
+        <option>Turma: T</option>
+        <option>Turma: U</option>
+        <option>Turma: V</option>
+        <option>Turma: W</option>
+        <option>Turma: X</option>
+        <option>Turma: Y</option>
+        <option>Turma: Z</option>
+    </select>
+</div>
+<label for="unidadeTematica">Unidade Temática (Obrigatório):</label>
+<input type="text" id="unidadeTematica" name="unidadeTematica" placeholder="Preencha a unidade tematica" required>
+<label for="tema">Tema (Obrigatório):</label>
+<input type="text" id="tema" name="tema" placeholder="Preencha o tema da aula" required>
+
+                </div>
+                    <label for="objetivoEspecifico">Objetivos Específicos (Obrigatório):</label>
+                    <div id="objetivosContainer">
+                        <input type="text" id="objetivoEspecifico" name="objetivoEspecifico" placeholder="Preencha o primeiro objectivo especifico" required>
+                    </div>
+                    <button type="button" onclick="adicionarObjetivo()">Clica aqui para abrir novo campo para adicionar outro objectivo</button>
+                    <button type="button" onclick="removerObjetivo()">Clica aqui para remover o campo que adicionou</button>
+
+                    <label for="conteudoMediacao">Indica a pagina de apontamentos. Caso queira colocar em anexo deixa em branco:</label>
+                    <input type="text" id="conteudoMediacao" name="conteudoMediacao" placeholder="Preencha no formato numerico com o maximo 3 digitos" oninput="this.value = this.value.slice(0, 3).replace(/[^0-9]/g, '')" pattern="[0-9]{0,3}">
+
+                    <label for="conteudoDominio">Indica o numero de execicio (e alineas se necessario) e a pagina que se encontra, como no formato  do campo, caso queira. (Nao exceda 80 caracteres):</label>
+                    <input type="text" id="conteudoDominio" name="conteudoDominio" placeholder="Exercico nº  1. a), b), c); 2. a), b) da pagina xx do livro do aluno" maxlength="80">
+
+                    <label for="conteudoControle">Indica o numero de execicio a dar como TPC (e alineas se necessario) e a pagina que se encontra, como no formato  do campo caso queira. (Nao exceda 80 caracteres):</label>
+                    <input type="text" id="conteudoControle" name="conteudoControle" placeholder="Exercicio nº  1. a), b), c); 2. a), b) da pagina xx do livro do aluno" maxlength="80">
+
+                    <label for="tempo">Tempo (Obrigatório):</label>
+                    <select id="tempo" required>
+                        <option value="">Selecione o tempo lectivo</option>
+                        <option>1º</option>
+                        <option>2º</option>
+                        <option>3º</option>
+                        <option>4º</option>
+                        <option>5º</option>
+                        <option>6º</option>
+                    </select>
+                    <label for="duracao">Duração (Obrigatório):</label>
+                    <select id="duracao" required>
+                        <option value="">Selecione a duração da aula</option>
+                        <option>45 minutos</option>
+                        <option>40 minutos</option>
+                        <option>50 minutos</option>
+                        <option>90 minutos</option>
+                    </select>
+                    <label for="tipoDeAula">Tipo de Aula (Obrigatório):</label>
+                    <select id="tipoDeAula" required>
+                        <option value="">Selecione o tipo da aula</option>
+                        <option>Inicial</option>
+                        <option>Não inicial</option>
+                        <option>Prática</option>
+                        <option>Direccionada</option>
+                        <option>Continuação</option>
+                        <option>Consolidação</option>
+                    </select>
+                </div>
+            <button type="button" onclick="gerarPlano()">Clica aqui para gerar o seu Plano de Aula</button>
+        </form>
+        <div class="info-container" id="infoContainer">
+            <button id="generatePDF" style="display: none;" onclick="document.getElementById('generatePDF').style.display='none'; let filename=prompt('Digite o nome do arquivo:','Plano_de_aula'); if(filename){ document.body.style.lineHeight = 'normal'; html2pdf().set({ margin: 0, filename: filename + '.pdf', html2canvas: { windowHeight: document.body.scrollHeight }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(document.body).toPdf().get('pdf').then(pdf => { const totalPages = pdf.internal.getNumberOfPages(); for (let pageNumber = totalPages; pageNumber > 1; pageNumber--) { pdf.deletePage(pageNumber); } }).save().then(() => { document.getElementById('generatePDF').style.display='block'; document.body.style.lineHeight = ''; }); } else { document.getElementById('generatePDF').style.display='block'; }">Salvar PDF</button>
+
+            <div class="info-left">
+                <div><label></label> <span id="infoEscola"></span></div>
+                <div><label></label> <span id="infoData"></span></div>
+                <div><label></label> <span id="infoNome"></span></div>
+                <div><label></label> <span id="infoDisciplina"></span></div>
+                <div><label></label> <span id="infoUnidadeTematica"></span></div>
+                <div><label></label> <span id="infoTema"></span></div>
+            </div>
+            <div class="info-right">
+                <div class="objective"><label></label> <span id="infoObjetivoEspecifico"></span></div>
+                <div><label></label> <span id="infoTempo"></span></div>
+                <div><label></label> <span id="infoDuracao"></span></div>
+                <div><label></label> <span id="infoTipoDeAula"></span></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table id="lessonPlanTable">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Função Didática <br> e <br> Tempo</th>
+                        <th rowspan="2">Conteúdo</th>
+                        <th colspan="2">Atividades</th>
+                        <th rowspan="2">Método</th>
+                        <th rowspan="2">Meios de Ensino</th>
+                    </tr>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Aluno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Introdução e Motivação <br> <br> (5 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Mediação e Assimilação <br> <br> (10 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Domínio e Consolidação <br> <br> (15 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Controle e Avaliação <br> <br> (15 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

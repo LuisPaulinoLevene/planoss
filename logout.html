@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página para desautenticar o usuário e permitir um novo login">
+    <title>Desautenticação</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <p></p>
+    </div>
+
+    <!-- Firebase JS -->
+    <script type="module">
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Pergunta ao usuário se ele tem certeza que deseja desautenticar
+        window.addEventListener('DOMContentLoaded', () => {
+            const confirmLogout = confirm("Tem certeza que deseja terminar a sessão?");
+            if (confirmLogout) {
+                // Exibe a mensagem temporária de desautenticação
+                document.querySelector('.container p').textContent = "Terminando sessão";
+
+                // Desautentica o usuário e redireciona para o login
+                signOut(auth).then(() => {
+                    console.log('Usuário desautenticado');
+                    setTimeout(() => {
+                        window.location.href = "index.html"; // Redireciona para o login após a desautenticação
+                    }, 100); // Espera  segundos para exibir a mensagem
+                }).catch((error) => {
+                    console.error('Erro ao desautenticar: ', error);
+                });
+            } else {
+                // Caso o usuário escolha não desautenticar, redireciona para a home
+                window.location.href = "home.html";
+            }
+        });
+    </script>
+
+</body>
+</html>

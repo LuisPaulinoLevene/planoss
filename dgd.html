@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apontamentos</title>
+    <!-- Incluindo o TinyMCE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.6.0/tinymce.min.js"></script>
+    <!-- Incluindo o Tesseract.js para OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="dgd.css">
+    <script src="dgd.js"></script>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <h1>Faça uma pesquisa do seu tema, copie as informações importantes e cole no campo editável. Caso não queira pesquisar, carregue uma imagem que contém os seus apontamentos e extraia, depois pode organizar do seu jeito.</h1>
+        <form id="search-form">
+            <label for="search">Digite a sua pergunta ou tema que pretende pesquisar:</label>
+            <input type="text" id="search" name="search" placeholder="Digite a sua pergunta ou tema que pretende pesquisar" required>
+            <button type="submit">Pesquisar</button>
+            <input type="file" id="file-input" accept="image/*">
+            <button type="button" id="process-image">Extrair texto da imagem carregada</button>
+        </form>
+        <div class="content">
+            <div id="full-text"></div>
+            <textarea id="editor-container"></textarea>
+            <button id="attach-content">Gerar apontamentos</button>
+        </div>
+        <div class="attachments-container" id="attachments-container">
+            <!-- Anexos serão adicionados aqui -->
+        </div>
+    </div>
+
+    <!-- Div para exibir o conteúdo do anexo em toda a página -->
+    <div id="full-page">
+        <div id="full-page-content"></div>
+        <!-- O botão "Salvar em PDF" está aqui -->
+        <button id="save-pdf">Salvar em PDF</button>
+    </div>
+</body>
+</html>

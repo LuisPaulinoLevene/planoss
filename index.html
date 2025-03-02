@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bem-vindo ao Plano Automático, a plataforma inovadora projetada especialmente para os professores de Moçambique. Com o nosso aplicativo, você pode criar e gerenciar seus planos de aula de forma digital diretamente no seu celular Android. Diga adeus à escrita manual e reduza o tempo gasto com anotações, permitindo que você se concentre no que realmente importa: ensinar. Desenvolvido por Luis Paulino Levene Maquina, professor primário na Escola Básica de Dunda, no Distrito de Macossa, na província de Manica, o Plano Automático visa facilitar a rotina dos educadores e tornar o planejamento das aulas mais eficiente e acessível. Experimente a facilidade e a eficiência de planejar suas aulas de maneira prática!">
+    <meta name="google-site-verification" content="t08SgkfwnibBLow_kYa9gJDrfbgnoI51qSkr4ChGt-I" />
+    <title>Plano Automático</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #333;
+            padding: 10px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            margin: 10px 0;
+            padding: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        .divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+        .btn-custom {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        .error-text {
+            color: red;
+            font-size: 14px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+        #forgotPasswordBtn {
+            margin-top: 10px;
+            text-decoration: none;
+        }
+        .mb-4 {
+            color: #404EE5;
+        }
+        .clickable-text {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .alert-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: auto;
+            z-index: 9999;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+        .alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Adicionando o iframe */
+        #iframeContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10; /* Para garantir que o iframe fique acima do conteúdo principal */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Adicionando o iframe -->
+    <div id="iframeContainer" style="display: none;">
+        <iframe src="about:blank" id="iframe"></iframe>
+    </div>
+
+    <div id="mainContent">
+        <div class="container text-center">
+            <h2 class="mb-4">Plano Automático</h2>
+            <p id="formTitle">Entrar</p>
+
+            <div id="loginForm">
+                <input type="email" class="form-control" id="loginEmail" placeholder="Insira o seu e-mail" required>
+                <p id="loginEmailError" class="error-text" style="display: none;">Desculpe, seu e-mail não está cadastrado ou você esqueceu a sua senha! Se esqueceu a senha, clique em 'Esqueci minha senha' para redefinir. Se não está cadastrado, clique em 'Cadastre-se' para fazer o seu cadastro. Obrigado</p>
+                <p id="emailInvalidError" class="error-text" style="display: none;">E-mail inválido. Por favor, use um e-mail do Gmail.</p>
+
+                <input type="password" class="form-control" id="loginPassword" placeholder="Insira a sua senha" required>
+
+                <button id="loginBtn" class="btn btn-primary btn-custom" onclick="login()">Entrar</button>
+                <a id="forgotPasswordBtn" class="btn btn-link text-dark my-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Esqueci minha senha</a>
+                <div class="divider">ou</div>
+                <button id="showRegisterBtn" class="btn btn-success btn-custom" onclick="showRegister()">Cadastre-se</button>
+                <button onclick="window.location.href = '6tl.html';">Faca o seu plano de aula (testar)</button>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <input type="email" class="form-control" id="registerEmail" placeholder="Insira o e-mail associado à sua conta Gmail" required>
+                <p id="registerEmailError" class="error-text" style="display: none;">Por favor, o seu e-mail já foi cadastrado com sucesso, pode redefinir a sua senha. Volte e clique em "Esqueci minha senha"</p>
+                <p id="registerEmailInvalidError" class="error-text" style="display: none;">E-mail inválido. Por favor, use um e-mail do Gmail.</p>
+
+                <input type="password" class="form-control" id="registerPassword" placeholder="Crie a sua nova senha (mínimo 6 caracteres)" required>
+                <p class="alert-message">Por favor, use um e-mail associado à sua conta Gmail para facilitar a recuperação de senha, caso necessário.</p>
+
+                <button id="registerBtn" class="btn btn-primary btn-custom" onclick="register()">Cadastrar</button>
+
+                <div class="divider">ou</div>
+                <button id="showLoginBtn" class="btn btn-secondary btn-custom" onclick="showLogin()">Voltar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Recuperação de Senha -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotPasswordModalLabel">Recuperar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label">Digite seu email para redefinir a senha:</label>
+                        <input type="email" id="resetEmail" class="form-control" placeholder="Digite seu email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="sendResetEmailBtn" class="btn btn-primary" onclick="sendPasswordReset()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importando Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Função de validação do e-mail
+        function validateEmail(email) {
+            const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            return regex.test(email);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verifica se o usuário está autenticado
+            const unsubscribe = onAuthStateChanged(auth, user => {
+                if (user) {
+                    // Remove todos os elementos da página principal
+                    document.getElementById('mainContent').innerHTML = '';
+
+                    // Exibe o iframe e carrega o conteúdo
+                    document.getElementById('iframeContainer').style.display = 'block';
+                    document.getElementById('iframe').src = 'nome.html'; // Substitua pelo conteúdo que você deseja carregar no iframe
+                } else {
+                    // Se o usuário não estiver autenticado, mantém o comportamento normal de login
+                    console.log('Usuário não autenticado');
+                }
+            });
+
+            // Funções de login, cadastro e recuperação de senha
+            window.login = async function() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                // Validação do e-mail
+                if (!validateEmail(email)) {
+                    document.getElementById('emailInvalidError').style.display = 'block';
+                    return;
+                }
+
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    console.log('Usuário logado com sucesso');
+                } catch (error) {
+                    console.error(error);
+                    document.getElementById('loginEmailError').style.display = 'block';
+                }
+            };
+
+            window.register = async function() {
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+
+                // Validação do e-mail
+                if (!validateEmail(email)) {
+                    document.getElementById('registerEmailInvalidError').style.display = 'block';
+                    return;
+                }
+
+                try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    console.log('Usuário cadastrado com sucesso');
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                } catch (error) {
+                    console.error(error);
+                    document.getElementById('registerEmailError').style.display = 'block';
+                }
+            };
+
+            window.sendPasswordReset = async function() {
+                const email = document.getElementById('resetEmail').value;
+
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    console.log('Email de recuperação enviado');
+                    alert('Verifique seu email para redefinir a senha');
+                } catch (error) {
+                    console.error(error);
+                    alert('Erro ao enviar e-mail de recuperação');
+                }
+            };
+
+            // Alternando entre login e cadastro
+            window.showRegister = function() {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            };
+
+            window.showLogin = function() {
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            };
+        });
+    </script>
+
+    <!-- Importando o script do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

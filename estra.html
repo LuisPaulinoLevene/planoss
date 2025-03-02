@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Bonito</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif; /* Define a fonte padrão para o corpo do texto como 'Times New Roman' ou uma fonte serifada genérica se não estiver disponível */
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 13px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            width: 100%;
+            max-width: 1100px; /* Aumente o numero para o plano ser exibido a partir do topo */
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 200px; /* Altere o numero para o formulario ser exibido a partir do topo */
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #tabelaPlanoAula {
+          display: none;
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          max-height: 10vh; /* Define uma altura máxima e permite rolagem vertical */
+          overflow-y: auto; /* Permite rolagem vertical */
+          border: 1px solid #ddd;
+      }
+
+      #tabelaPlanoAula th, #tabelaPlanoAula td {
+          border: 1px solid #000; /* Define a borda da tabela como uma linha sólida preta de 1px */
+          padding: 1px; /* Reduz o padding para mais informações na tela */
+          text-align: left;
+          font-size: 16px; /* Reduz o tamanho da fonte para mais informações na tela */
+      }
+
+      #tabelaPlanoAula th {
+          background-color: #white;
+          font-size: 16px; /* Mantém um tamanho de fonte maior para o cabeçalho */
+          text-align: center;
+      }
+
+        #salvarPDF {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plano gerado</h1>
+        <div id="formulario">
+            <div class="form-group">
+              <h1>Formulario de plano de aula</h1>
+                <label for="estrategias1">Escolha a estratégia para introdução e motivação:</label>
+                <select id="estrategias1" name="estrategias1"></select>
+                <label for="atividades_professor1">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor1" name="atividades_professor1" readonly>
+                <label for="atividades_aluno1">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno1" name="atividades_aluno1" readonly>
+                <label for="conteudo1">Conteudo:</label>
+                <input type="text" id="conteudo1" name="conteudo1" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias2">Escolha a estratégia para mediação e assimilação:</label>
+                <select id="estrategias2" name="estrategias2"></select>
+                <label for="atividades_professor2">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor2" name="atividades_professor2" readonly>
+                <label for="atividades_aluno2">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno2" name="atividades_aluno2" readonly>
+                <label for="conteudo2">Conteudo:</label>
+                <input type="text" id="conteudo2" name="conteudo2" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias3">Escolha a estratégia para domínio e consolidação:</label>
+                <select id="estrategias3" name="estrategias3"></select>
+                <label for="atividades_professor3">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor3" name="atividades_professor3" readonly>
+                <label for="atividades_aluno3">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno3" name="atividades_aluno3" readonly>
+                <label for="conteudo3">Conteudo:</label>
+                <input type="text" id="conteudo3" name="conteudo3" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias4">Escolha a estratégia para controle e avaliação:</label>
+                <select id="estrategias4" name="estrategias4"></select>
+                <label for="atividades_professor4">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor4" name="atividades_professor4" readonly>
+                <label for="atividades_aluno4">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno4" name="atividades_aluno4" readonly>
+                <label for="conteudo4">Conteudo:</label>
+                <input type="text" id="conteudo4" name="conteudo4" readonly>
+            </div>
+            <button type="submit" id="enviar">Enviar</button>
+        </div>
+
+        <!-- Tabela que será exibida após o envio do formulário -->
+        <table id="tabelaPlanoAula">
+          <thead>
+              <tr>
+                  <th rowspan="2">Tempo</th>
+                  <th rowspan="2">Função Didática</th>
+                  <th rowspan="2">Conteúdo</th>
+                  <th colspan="2">Atividades</th>
+                  <th rowspan="2">Técnicas/Sugestões Metodológicas</th>
+                  <th rowspan="2">Meios auxiliares</th>
+                  <th rowspan="2">Observações</th>
+              </tr>
+              <tr>
+                  <th>Professor</th>
+                  <th>Aluno</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td></td>
+                  <td>Introdução e Motivação</td>
+                  <td></td>
+                  <td id="professor1"></td>
+                  <td id="aluno1"></td>
+                  <td id="tecnica1"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Medição e Assimilação</td>
+                  <td></td>
+                  <td id="professor2"></td>
+                  <td id="aluno2"></td>
+                  <td id="tecnica2"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Domínio e Consolidação</td>
+                  <td></td>
+                  <td id="professor3"></td>
+                  <td id="aluno3"></td>
+                  <td id="tecnica3"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Controle e Avaliação</td>
+                  <td></td>
+                  <td id="professor4"></td>
+                  <td id="aluno4"></td>
+                  <td id="tecnica4"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+          </tbody>
+      </table>
+
+        <button id="salvarPDF">Salvar PDF</button>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, setPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        console.log('Firebase inicializado', app);
+
+        // Define a persistência da autenticação
+        setPersistence(auth, browserSessionPersistence)
+            .then(() => {
+                // Verificação de autenticação ao carregar a página
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) {
+                        console.log('Usuário não autenticado, redirecionando para index.html.');
+                        window.location.href = 'index.html'; // Redireciona para a página de login
+                    }
+                });
+            })
+            .catch((error) => {
+                console.error('Erro ao definir a persistência:', error);
+            });
+
+        // Função de logout
+        const logoutButton = document.getElementById('logoutButton');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    console.log('Usuário desconectado');
+                    window.location.href = 'index.html'; // Redireciona para a página de login após logout
+                }).catch((error) => {
+                    console.error('Erro ao desconectar:', error);
+                });
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const estrategias = {
+                1: [
+                    { value: "vire_fale", text: "Vire e Fale", professor: "Apresenta a questão: {questao}; organiza os alunos em pares de 2 elementos; Diga aos alunos que virem e falem com o/a colega, sobre a questão; Circula na sala para escutar as discussões dos pares; Indica alguns voluntários para partilharem com a turma, o que o seu par falou; sistematiza, estabelecendo conexões com a lição com base nas ideias apresentadas", aluno: "Escuta a questão; Ficam organizados em pares de 2 elementos;  Viram e falam com o/a colega sobre a questão;  Leva-se o aluno voluntário para partilhar com a turma, o que o seu par falou; Escuta a sistematizacao feita pelo professo" },
+                    { value: "pensar_partilhar_apresentar", text: "Pensar-Partilhar-Apresentar", professor: "Explique o conceito e os passos", aluno: "Prepare uma pequena apresentação sobre o conceito" },
+                    { value: "conversa_giz", text: "Conversa de giz", professor: "Utilize o quadro para desenvolver um tópico", aluno: "Contribua com ideias no quadro durante a discussão", conteudo: "Luis"},
+                    { value: "grupo_peritos", text: "Grupo de peritos", professor: "Divida os alunos em grupos de peritos sobre tópicos específicos", aluno: "Prepare uma breve apresentação sobre o tópico do grupo" },
+                    { value: "mapa_conceito", text: "Mapa de conceito", professor: "Crie um mapa conceitual colaborativo", aluno: "Adicione ideias ao mapa conceitual" },
+                    { value: "simulacao_aulas", text: "Simulação de aulas", professor: "Organize uma simulação de aula com papel de professor", aluno: "Participe da simulação como aluno" }
+                ],
+                2: [
+                    { value: "vire_fale", text: "Vire e Fale", professor: "Apresenta a questão: {questao}; organiza os alunos em pares de 2 elementos; Diga aos alunos que virem e falem com o/a colega, sobre a questão {questao}; Circula na sala para escutar as discussões dos pares; Indica alguns voluntários para partilharem com a turma, o que o seu par falou; sistematiza, estabelecendo conexões com a lição com base nas ideias apresentadas", aluno: "Escuta a questão; Ficam organizados em pares de 2 elementos;  Viram e falam com o/a colega sobre a questão;  Leva-se o aluno voluntário para partilhar com a turma, o que o seu par falou; Escuta a sistematizacao feita pelo professo" },
+                    { value: "pensar_partilhar_apresentar", text: "Pensar-Partilhar-Apresentar", professor: "Explique o conceito e os passos", aluno: "Prepare uma pequena apresentação sobre o conceito" },
+                    { value: "conversa_giz", text: "Conversa de giz", professor: "Utilize o quadro para desenvolver um tópico", aluno: "Contribua com ideias no quadro durante a discussão" },
+                    { value: "grupo_peritos", text: "Grupo de peritos", professor: "Divida os alunos em grupos de peritos sobre tópicos específicos", aluno: "Prepare uma breve apresentação sobre o tópico do grupo" },
+                    { value: "mapa_conceito", text: "Mapa de conceito", professor: "Crie um mapa conceitual colaborativo", aluno: "Adicione ideias ao mapa conceitual" },
+                    { value: "simulacao_aulas", text: "Simulação de aulas", professor: "Organize uma simulação de aula com papel de professor", aluno: "Participe da simulação como aluno" }
+                ],
+                3: [
+                    { value: "vire_fale", text: "Vire e Fale", professor: "Apresenta a questão: {questao}; organiza os alunos em pares de 2 elementos; Diga aos alunos que virem e falem com o/a colega, sobre a questão {questao}; Circula na sala para escutar as discussões dos pares; Indica alguns voluntários para partilharem com a turma, o que o seu par falou; sistematiza, estabelecendo conexões com a lição com base nas ideias apresentadas", aluno: "Escuta a questão; Ficam organizados em pares de 2 elementos;  Viram e falam com o/a colega sobre a questão;  Leva-se o aluno voluntário para partilhar com a turma, o que o seu par falou; Escuta a sistematizacao feita pelo professo" },
+                    { value: "pensar_partilhar_apresentar", text: "Pensar-Partilhar-Apresentar", professor: "Explique o conceito e os passos", aluno: "Prepare uma pequena apresentação sobre o conceito" },
+                    { value: "conversa_giz", text: "Conversa de giz", professor: "Utilize o quadro para desenvolver um tópico", aluno: "Contribua com ideias no quadro durante a discussão" },
+                    { value: "grupo_peritos", text: "Grupo de peritos", professor: "Divida os alunos em grupos de peritos sobre tópicos específicos", aluno: "Prepare uma breve apresentação sobre o tópico do grupo" },
+                    { value: "mapa_conceito", text: "Mapa de conceito", professor: "Crie um mapa conceitual colaborativo", aluno: "Adicione ideias ao mapa conceitual" },
+                    { value: "simulacao_aulas", text: "Simulação de aulas", professor: "Organize uma simulação de aula com papel de professor", aluno: "Participe da simulação como aluno" }
+                ],
+                4: [
+                    { value: "vire_fale", text: "Vire e Fale", professor: "Apresenta a questão: {questao}; organiza os alunos em pares de 2 elementos; Diga aos alunos que virem e falem com o/a colega, sobre a questão {questao}; Circula na sala para escutar as discussões dos pares; Indica alguns voluntários para partilharem com a turma, o que o seu par falou; sistematiza, estabelecendo conexões com a lição com base nas ideias apresentadas", aluno: "Escuta a questão; Ficam organizados em pares de 2 elementos;  Viram e falam com o/a colega sobre a questão;  Leva-se o aluno voluntário para partilhar com a turma, o que o seu par falou; Escuta a sistematizacao feita pelo professo" },
+                    { value: "pensar_partilhar_apresentar", text: "Pensar-Partilhar-Apresentar", professor: "Explique o conceito e os passos", aluno: "Prepare uma pequena apresentação sobre o conceito" },
+                    { value: "conversa_giz", text: "Conversa de giz", professor: "Utilize o quadro para desenvolver um tópico", aluno: "Contribua com ideias no quadro durante a discussão" },
+                    { value: "grupo_peritos", text: "Grupo de peritos", professor: "Divida os alunos em grupos de peritos sobre tópicos específicos", aluno: "Prepare uma breve apresentação sobre o tópico do grupo" },
+                    { value: "mapa_conceito", text: "Mapa de conceito", professor: "Crie um mapa conceitual colaborativo", aluno: "Adicione ideias ao mapa conceitual" },
+                    { value: "simulacao_aulas", text: "Simulação de aulas", professor: "Organize uma simulação de aula com papel de professor", aluno: "Participe da simulação como aluno" }
+                ]
+            };
+
+            function populateSelect(selectElement, estrategias) {
+                selectElement.innerHTML = '<option value="">Selecione...</option>';
+                estrategias.forEach(e => {
+                    const option = document.createElement("option");
+                    option.value = e.value;
+                    option.textContent = e.text;
+                    selectElement.appendChild(option);
+                });
+            }
+
+            function updateActivities(selectElement, atividadesProfessor, atividadesAluno, estrategias) {
+                const selectedValue = selectElement.value;
+                const estrategiaSelecionada = estrategias.find(e => e.value === selectedValue);
+
+                if (estrategiaSelecionada) {
+                    if (estrategiaSelecionada.value === "vire_fale") {
+                        let questao;
+                        let numeroElementos;
+
+                        while (!questao) {
+                            questao = prompt("Digite a questão (não pode estar vazio):");
+                        }
+
+                        while (!numeroElementos) {
+                            numeroElementos = prompt("Digite o número de elementos por grupo (não pode estar vazio):");
+                        }
+
+                        atividadesProfessor.value = estrategiaSelecionada.professor
+                            .replace("{questao}", questao)
+                            .replace("{numero-de-elemento}", numeroElementos);
+
+                        atividadesAluno.value = estrategiaSelecionada.aluno
+                            .replace("{questao}", questao);
+                    } else {
+                        atividadesProfessor.value = estrategiaSelecionada.professor;
+                        atividadesAluno.value = estrategiaSelecionada.aluno;
+                    }
+                } else {
+                    atividadesProfessor.value = '';
+                    atividadesAluno.value = '';
+                }
+            }
+
+            function preencherTabela() {
+                for (let i = 1; i <= 4; i++) {
+                    const estrategiaSelect = document.getElementById(`estrategias${i}`);
+                    const atividadesProfessor = document.getElementById(`atividades_professor${i}`);
+                    const atividadesAluno = document.getElementById(`atividades_aluno${i}`);
+
+                    populateSelect(estrategiaSelect, estrategias[i]);
+
+                    estrategiaSelect.addEventListener('change', function() {
+                        updateActivities(this, atividadesProfessor, atividadesAluno, estrategias[i]);
+                    });
+                }
+            }
+
+            function exibirTabela() {
+                document.getElementById('formulario').style.display = 'none';
+                document.getElementById('enviar').style.display = 'none';
+                document.getElementById('tabelaPlanoAula').style.display = 'table';
+                document.getElementById('salvarPDF').style.display = 'block';
+
+                for (let i = 1; i <= 4; i++) {
+                    const estrategiaSelect = document.getElementById(`estrategias${i}`);
+                    const selectedOption = estrategiaSelect.options[estrategiaSelect.selectedIndex];
+                    const atividadesProfessor = document.getElementById(`atividades_professor${i}`).value;
+                    const atividadesAluno = document.getElementById(`atividades_aluno${i}`).value;
+
+                    document.getElementById(`professor${i}`).innerText = atividadesProfessor;
+                    document.getElementById(`aluno${i}`).innerText = atividadesAluno;
+                    document.getElementById(`tecnica${i}`).innerText = selectedOption ? selectedOption.text : '';
+                }
+            }
+
+            function salvarPDF() {
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF('p', 'mm', 'a4'); // Página A4 em milímetros
+
+              // Defina as margens em milímetros
+              const margemEsquerda = 10;
+              const margemDireita = 10;
+              const margemSuperior = 20;
+              const margemInferior = 50;
+
+              html2canvas(document.getElementById('tabelaPlanoAula'), {
+                  scale: 2 // Aumenta a escala da captura para melhorar a qualidade da imagem
+              }).then(canvas => {
+                  const imgData = canvas.toDataURL('image/png');
+                  const imgWidth = 210 - margemEsquerda - margemDireita; // Largura da página A4 menos as margens
+                  const imgHeight = canvas.height * imgWidth / canvas.width; // Calcula a altura da imagem proporcionalmente
+
+                  // Adiciona a imagem ao PDF
+                  let position = margemSuperior; // Início da imagem na página
+
+                  doc.addImage(imgData, 'PNG', margemEsquerda, position, imgWidth, imgHeight);
+                  let heightLeft = imgHeight - (doc.internal.pageSize.height - margemSuperior - margemInferior);
+
+                  // Adiciona páginas adicionais se a imagem for maior que a altura da página
+                  while (heightLeft > 0) {
+                      position = heightLeft - imgHeight;
+                      doc.addPage();
+                      doc.addImage(imgData, 'PNG', margemEsquerda, position, imgWidth, imgHeight);
+                      heightLeft -= doc.internal.pageSize.height;
+                  }
+
+                  // Salva o PDF
+                  doc.save('plano_de_aula.pdf');
+              });
+          }
+            document.getElementById('enviar').addEventListener('click', exibirTabela);
+            document.getElementById('salvarPDF').addEventListener('click', salvarPDF);
+
+            preencherTabela();
+        });
+    </script>
+</body>
+</html>
