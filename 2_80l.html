@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Aula</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 7000px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+
+        }
+
+        .container > * {
+            margin-bottom: 10px; /* Adiciona espaçamento entre elementos */
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            width: 100%;
+        }
+
+        .input-container > div {
+            margin: 10px 0; /* Ajusta o espaçamento vertical */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px; /* Espaçamento abaixo de cada label */
+        }
+
+        input,
+        select,
+        button {
+            width: 100%; /* Garante que os elementos ocupem toda a largura */
+            box-sizing: border-box; /* Considera padding e borda como parte do tamanho total */
+            margin-bottom: 10px; /* Espaçamento entre os elementos */
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .info-container {
+            display: none;
+            width: 100%;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .info-left,
+        .info-right {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+        }
+
+        .info-left div,
+        .info-right div {
+            margin-bottom: 10px;
+        }
+
+        .info-left label,
+        .info-right label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .info-left span,
+        .info-right span {
+            display: inline;
+        }
+
+        .info-right .objective span {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .table-container {
+            display: none;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            min-width: 5px;
+            font-size: 13px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
+            line-height: 1.0; /* Define o espaçamento entre linhas */
+        }
+
+
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: white;
+        }
+
+        .left-align {
+            text-align: left;
+            font-size: small;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 6px;
+            }
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="lessonPlanForm">
+            <div class="input-container">
+                <div>
+<label for="escola">Escola (Obrigatório):</label>
+<input type="text" id="escola" name="escola" placeholder="Escreve o nome da escola" required>
+
+<label for="data">Data (Obrigatório):</label>
+<input type="date" id="data" name="data" required>
+<label for="nome">Nome (Obrigatório):</label>
+<input type="text" id="nome" name="nome" placeholder="Preencha o nome do professor" required>
+<label for="disciplina">Disciplina (Obrigatório):</label>
+<div id="disciplina">
+    <select name="disciplina" required>
+        <option value="">Selecione a Disciplina</option>
+        <option>Português</option>
+        <option>Matemática</option>
+        <option>Ciências Sociais</option>
+        <option>Ciências Naturais</option>
+        <option>Educação Física</option>
+        <option>Educação Visual e Ofícios</option>
+        <option>Educação Visual</option>
+        <option>Agro-pecuária</option>
+        <option>Física</option>
+        <option>História</option>
+        <option>Geografia</option>
+        <option>Biologia</option>
+        <option>Química</option>
+    </select>
+    <select name="classe" required>
+        <option value="">Selecione a Classe (Obrigatório)</option>
+        <option>1ª Classe</option>
+        <option>2ª Classe</option>
+        <option>3ª Classe</option>
+        <option>4ª Classe</option>
+        <option>5ª Classe</option>
+        <option>6ª Classe</option>
+    </select>
+    <select name="turma" required>
+        <option value="">Selecione a Turma (Obrigatório)</option>
+        <option>Turma: A</option>
+        <option>Turma: B</option>
+        <option>Turma: C</option>
+        <option>Turma: D</option>
+        <option>Turma: E</option>
+        <option>Turma: F</option>
+        <option>Turma: G</option>
+        <option>Turma: H</option>
+        <option>Turma: I</option>
+        <option>Turma: J</option>
+        <option>Turma: K</option>
+        <option>Turma: L</option>
+        <option>Turma: M</option>
+        <option>Turma: N</option>
+        <option>Turma: O</option>
+        <option>Turma: P</option>
+        <option>Turma: Q</option>
+        <option>Turma: R</option>
+        <option>Turma: S</option>
+        <option>Turma: T</option>
+        <option>Turma: U</option>
+        <option>Turma: V</option>
+        <option>Turma: W</option>
+        <option>Turma: X</option>
+        <option>Turma: Y</option>
+        <option>Turma: Z</option>
+    </select>
+</div>
+<label for="unidadeTematica">Unidade Temática (Obrigatório):</label>
+<input type="text" id="unidadeTematica" name="unidadeTematica" placeholder="Preencha a unidade tematica" required>
+<label for="tema">Tema:</label>
+<input type="text" id="tema" name="tema" placeholder="Preencha o tema da aula" required>
+
+                </div>
+                    <label for="objetivoEspecifico">Objetivos Específicos (Obrigatório):</label>
+                    <div id="objetivosContainer">
+                        <input type="text" id="objetivoEspecifico" name="objetivoEspecifico" placeholder="Preencha o primeiro objectivo especifico" required>
+                    </div>
+                    <button type="button" onclick="adicionarObjetivo()">Clica aqui para abrir novo campo para adicionar outro objectivo</button>
+                    <button type="button" onclick="removerObjetivo()">Clica aqui para remover o campo que adicionou</button>
+
+                    <label for="conteudoMediacao">Indica a (s) pagina (s) de apontamentos, como no exemplo. Caso queira colocar em anexo deixa em branco. Nao exceda 10 caracteres):</label>
+                    <input type="text" id="conteudoMediacao" name="conteudoMediacao" placeholder="Ex.: 96; ou 69 a 70" maxlength="10">
+
+                    <label for="conteudoDominio">Indica o numero de execicio (e alineas se necessario) e a pagina que se encontra, como no formato  do campo, caso queira. (Nao exceda 80 caracteres):</label>
+                    <input type="text" id="conteudoDominio" name="conteudoDominio" placeholder="Exercico nº  1. a), b), c); 2. a), b) da pagina xx do livro do aluno" maxlength="80">
+
+                    <label for="conteudoControle">Indica o numero de execicio a dar como TPC (e alineas se necessario), ou Escreva a expressao "Em anexo", se quer colocar em anexo. Se pretende fechar por um resumo, entao deixa o campo em branco. (Nao exceda 80 caracteres):</label>
+                    <input type="text" id="conteudoControle" name="conteudoControle" maxlength="80">
+
+                    <label for="materialIntroducao">Escreve o material didactico que pretende usar na Introducao e Motivacao, caso nao queira, deixa em branco. (Nao exceda 20 caracteres):</label>
+                    <input type="text" id="materialIntroducao" name="materialIntroducao" placeholder="Ex.: Pauzinhos, cartaz, etc." maxlength="20">
+                    <label for="materialMediacao">Escreve o material didactico que pretende usar na Mediacao e Assimilacao, caso nao queira, deixa em branco. (Nao exceda 20 caracteres):</label>
+                    <input type="text" id="materialMediacao" name="materialMediacao" placeholder="Ex.: Pauzinhos, cartaz, etc." maxlength="20">
+                    <label for="materialDominio">Escreve o material didactico que pretende usar no Dominio e Consolidacao, caso nao queira, deixa em branco. (Nao exceda 20 caracteres):</label>
+                    <input type="text" id="materialDominio" name="materialDominio" placeholder="Ex.: Pauzinhos, cartaz, etc." maxlength="20">
+                    <label for="materialControlo">Escreve o material didactico que pretende usar no Controle e Avaliacao, caso nao queira, deixa em branco. (Nao exceda 20 caracteres):</label>
+                    <input type="text" id="materialControlo" name="materialControlo" placeholder="Ex.: Pauzinhos, cartaz, etc." maxlength="20">
+
+                    <label for="tempo">Tempo (Obrigatório):</label>
+                    <select id="tempo" required>
+                        <option value="">Selecione o tempo lectivo</option>
+                        <option>1º e 2º</option>
+                        <option>2º e 3º</option>
+                        <option>3º e 4º</option>
+                        <option>4º e 5º</option>
+                        <option>5º e 6º</option>
+                    </select>
+                    <label for="duracao">Duração (Obrigatório):</label>
+                    <select id="duracao" required>
+                        <option>80 minutos</option>
+                    </select>
+                    <label for="tipoDeAula">Tipo de Aula (Obrigatório):</label>
+                    <select id="tipoDeAula" required>
+                        <option value="">Selecione o tipo da aula</option>
+                        <option>Inicial</option>
+                        <option>Não inicial</option>
+                        <option>Prática</option>
+                        <option>Direccionada</option>
+                        <option>Continuação</option>
+                        <option>Consolidação</option>
+                    </select>
+                </div>
+            <button type="button" onclick="gerarPlano()">Clica aqui para gerar o seu Plano de Aula</button>
+        </form>
+        <div class="info-container" id="infoContainer">
+            <button id="generatePDF" style="display: none;" onclick="document.getElementById('generatePDF').style.display='none'; let filename=prompt('Digite o nome do arquivo:','Plano_de_aula'); if(filename){ document.body.style.lineHeight = 'normal'; html2pdf().set({ margin: 0, filename: filename + '.pdf', html2canvas: { windowHeight: document.body.scrollHeight }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(document.body).toPdf().get('pdf').then(pdf => { const totalPages = pdf.internal.getNumberOfPages(); for (let pageNumber = totalPages; pageNumber > 1; pageNumber--) { pdf.deletePage(pageNumber); } }).save().then(() => { document.getElementById('generatePDF').style.display='block'; document.body.style.lineHeight = ''; }); } else { document.getElementById('generatePDF').style.display='block'; }">Salvar PDF</button>
+
+            <div class="info-left">
+                <div><label></label> <span id="infoEscola"></span></div>
+                <div><label></label> <span id="infoData"></span></div>
+                <div><label></label> <span id="infoNome"></span></div>
+                <div><label></label> <span id="infoDisciplina"></span></div>
+                <div><label></label> <span id="infoUnidadeTematica"></span></div>
+                <div><label></label> <span id="infoTema"></span></div>
+            </div>
+            <div class="info-right">
+                <div class="objective"><label></label> <span id="infoObjetivoEspecifico"></span></div>
+                <div><label></label> <span id="infoTempo"></span></div>
+                <div><label></label> <span id="infoDuracao"></span></div>
+                <div><label></label> <span id="infoTipoDeAula"></span></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table id="lessonPlanTable">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Função Didática <br> e <br> Tempo</th>
+                        <th rowspan="2">Conteúdo</th>
+                        <th colspan="2">Atividades</th>
+                        <th rowspan="2">Método</th>
+                        <th rowspan="2">Recursos Didácticos</th>
+                    </tr>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Aluno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Introdução e Motivação <br> <br> (10 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Mediação e Assimilação <br> <br> (30 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Domínio e Consolidação <br> <br> (30 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Controle e Avaliação <br> <br> (10 minutos) </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function adicionarObjetivo() {
+            const container = document.getElementById('objetivosContainer');
+
+            // Cria um novo input
+            const novoInput = document.createElement('input');
+            novoInput.type = 'text';
+            novoInput.name = 'objetivoEspecifico';
+            novoInput.required = true;
+            novoInput.placeholder = 'Digite um novo objetivo específico';
+
+            // Adiciona o novo input ao container
+            container.appendChild(novoInput);
+        }
+
+        function removerObjetivo() {
+            const container = document.getElementById("objetivosContainer");
+            const inputs = container.getElementsByTagName("input");
+            if (inputs.length > 1) {
+                container.removeChild(inputs[inputs.length - 1]);
+            } else {
+                alert("Desculpa, Você deve remover apenas os campos por si adicionados.");
+            }
+        }
+
+        function gerarPlano() {
+            const escola = document.getElementById('escola').value;
+            const data = document.getElementById('data').value;
+            const nome = document.getElementById('nome').value;
+            const disciplinaSelect = document.querySelector('select[name="disciplina"]');
+            const classeSelect = document.querySelector('select[name="classe"]');
+            const turmaSelect = document.querySelector('select[name="turma"]');
+            const disciplina = disciplinaSelect.value;
+            const classe = classeSelect.value;
+            const turma = turmaSelect.value;
+            const unidadeTematica = document.getElementById('unidadeTematica').value;
+            const tema = document.getElementById('tema').value;
+            const tempo = document.getElementById('tempo').value;
+            const duracao = document.getElementById('duracao').value;
+            const tipoDeAula = document.getElementById('tipoDeAula').value;
+            const conteudoMediacao = document.getElementById('conteudoMediacao').value || 'Em anexo';
+            const conteudoDominio = document.getElementById('conteudoDominio').value || 'Em anexo';
+            const conteudoControle = document.getElementById('conteudoControle').value;
+            const materialIntroducao = document.getElementById('materialIntroducao').value;
+            const materialMediacao = document.getElementById('materialMediacao').value;
+            const materialDominio = document.getElementById('materialDominio').value;
+            const materialControlo = document.getElementById('materialControlo').value;
+
+            // Coleta todos os objetivos específicos
+            const objetivosInputs = document.querySelectorAll('input[name="objetivoEspecifico"]');
+            let objetivosText = '';
+            objetivosInputs.forEach(input => {
+                if (input.value) {
+                    objetivosText += `<br> - ${input.value}`;
+                }
+            });
+
+            if (escola && data && nome && disciplina && classe && turma && unidadeTematica && tema && objetivosText && tempo && duracao && tipoDeAula) {
+                document.getElementById('infoEscola').innerText = `${escola}`;
+                document.getElementById('infoData').innerText = `Data: ${data.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1')}`;
+                document.getElementById('infoNome').innerText = `Nome: ${nome}, ${classe}, ${turma}`;
+                document.getElementById('infoDisciplina').innerText = `Disciplina: ${disciplina}.`;
+                document.getElementById('infoUnidadeTematica').innerText = `Unidade Temática: ${unidadeTematica}.`;
+                document.getElementById('infoTema').innerHTML = `Tema: <strong>${tema}</strong>.`;
+                document.getElementById('infoObjetivoEspecifico').innerHTML = `Objectivos Específicos:<strong>${objetivosText}</strong>.`;
+                document.getElementById('infoTempo').innerText = `Tempo: ${tempo}; Duração: ${duracao}; Tipo de Aula: ${tipoDeAula}.`;
+
+                document.querySelector('.table-container').style.display = 'block';
+                document.getElementById('lessonPlanForm').style.display = 'none';
+                document.getElementById('infoContainer').style.display = 'flex';
+
+
+                document.getElementById('generatePDF').style.display = 'block'; // Mostrar o botão PDF
+
+                const table = document.getElementById('lessonPlanTable');
+                const rows = table.getElementsByTagName('tbody')[0].rows;
+
+                // Introdução e Motivação
+                rows[0].cells[1].innerHTML = `<div class="left-align">- Controlo de presenças;<br>-Recapitulação da aula anterior; <br>- Apresentação do tema; <br>- Apresentação dos objectivos da aula.</div>`;
+                rows[0].cells[2].innerHTML = `<div class="left-align">- Faz o controlo de presenças;<br>- Orienta a recapitulação da aula anterior;<br>- Passa o tema no quadro; <br>- Apresenta os objectivos da aula.</div>`;
+                rows[0].cells[3].innerHTML = `<div class="left-align">- Responde a presença;<br>- Recapitula a aula anterior;<br>- Passa o tema no caderno; <br>- Presta atenção na apresentação dos objetivos da aula.</div>`;
+                rows[0].cells[4].innerHTML = `<div class="left-align">Elaboração Conjunta</div>`;
+                if (materialIntroducao.trim() !== '') {
+                    // Se preenchido, exibe "Marcação do TPC" seguido pelo conteúdo
+                    rows[0].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador, livro do aluno, ${materialIntroducao}</div>`;
+                } else {
+                    // Se não preenchido, exibe apenas "Correção dos exercícios;"
+                    rows[0].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador e livro do aluno</div>`;
+                }
+
+                // Mediação e Assimilação
+                const conteudoMediacao = document.getElementById('conteudoMediacao').value.trim(); // Obtém o valor e remove espaços em branco extras
+
+                // Verifica se conteudoMediacao está preenchido
+                if (conteudoMediacao) {
+                    rows[1].cells[1].innerHTML = `<div class="left-align"><strong>${tema}</strong>. <br><br>Os conteudos patentes na página ${conteudoMediacao} do livro do aluno.</div>`;
+                } else {
+                    rows[1].cells[1].innerHTML = `<div class="left-align"><strong>${tema}</strong>. <br><br>Apontamentos em anexo.</div>`;
+                }
+                rows[1].cells[2].innerHTML = `<div class="left-align">- Explora os conhecimentos sobre o tema;<br>- Explica o conteudo;<br>- Levanta as dúvidas; <br>- Esclarece as dúvidas; <br>- Passa os apontamentos no quadro.</div>`;
+                rows[1].cells[3].innerHTML = `<div class="left-align">- Contribui pelos conhecimentos sobre o tema;<br>- Presta atenção na explicação do conteudo;<br>- Apresenta as dúvidas; <br>- Presta atenção no esclarecimento das dúvidas; <br>- Passa os apontamentos no caderno.</div>`;
+                rows[1].cells[4].innerHTML = `<div class="left-align">Elaboração Conjunta</div>`;
+                if (materialMediacao.trim() !== '') {
+                    // Se preenchido, exibe "Marcação do TPC" seguido pelo conteúdo
+                    rows[1].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador, livro do aluno, ${materialMediacao}</div>`;
+                } else {
+                    // Se não preenchido, exibe apenas "Correção dos exercícios;"
+                    rows[1].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador e livro do aluno</div>`;
+                }
+
+                // Domínio e Consolidação
+                rows[2].cells[1].innerHTML = `<div class="left-align">Exercícios  de aplicação. <br> <br> ${conteudoDominio}.</div>`;
+                rows[2].cells[2].innerHTML = `<div class="left-align">- Apresenta os exercícios; <br> -Orienta a resolução dos exercícios no caderno.</div>`;
+                rows[2].cells[3].innerHTML = `<div class="left-align">- Anota os exercícios; <br>- Resolve os exercícios no caderno.</div>`;
+                rows[2].cells[4].innerHTML = `<div class="left-align">Elaboração Conjunta e Trabalho Independente </div>`;
+
+                if (materialDominio.trim() !== '') {
+                    // Se preenchido, exibe "Marcação do TPC" seguido pelo conteúdo
+                    rows[2].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador, livro do aluno, ${materialDominio}</div>`;
+                } else {
+                    // Se não preenchido, exibe apenas "Correção dos exercícios;"
+                    rows[2].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador e livro do aluno</div>`;
+                }
+
+                // Controle e Avaliação
+                // Verifica se conteudoControle está preenchido
+                if (conteudoControle.trim() !== '') {
+                    // Se preenchido, exibe "Marcação do TPC" seguido pelo conteúdo
+                    rows[3].cells[1].innerHTML = `<div class="left-align">Correção dos exercícios (Em anexo); <br> <br> <br>Marcação do TPC <br>${conteudoControle}</div>`;
+                } else {
+                    // Se não preenchido, exibe apenas "Correção dos exercícios;"
+                    rows[3].cells[1].innerHTML = `<div class="left-align">Correção dos exercícios (Em anexo); <br>-Resumo da aula</div>`;
+                }
+                // Verifica se conteudoControle está preenchido
+                if (conteudoControle.trim() !== '') {
+                    // Se preenchido, exibe o conteúdo com "Marca o TPC"
+                    rows[3].cells[2].innerHTML = `<div class="left-align">- Orienta a correção dos exercícios no quadro; <br>- Marca o TPC;</div>`;
+                } else {
+                    // Se não preenchido, exibe o conteúdo com "Orienta o resumo"
+                    rows[3].cells[2].innerHTML = `<div class="left-align">- Orienta a correção dos exercícios no quadro; <br>- Orienta o resumo;</div>`;
+                }
+
+                // Verifica se conteudoControle está preenchido
+                if (conteudoControle.trim() !== '') {
+                    // Se preenchido, exibe o conteúdo com "Marca o TPC"
+                    rows[3].cells[3].innerHTML = `<div class="left-align">- Corrige os exercícios no quadro;<br>- Aponta o TPC.</div>`;
+                } else {
+                    // Se não preenchido, exibe o conteúdo com "Orienta o resumo"
+                    rows[3].cells[3].innerHTML = `<div class="left-align">- Corrige os exercícios no quadro;<br>-Resume a aula.</div>`;
+                }
+
+
+
+                if (conteudoControle.trim() !== '') {
+                    // Se preenchido, exibe o conteúdo com "Marca o TPC"
+                    rows[3].cells[4].innerHTML = `<div class="left-align">Elaboração Conjunta e Trabalho Independente</div>`;
+                } else {
+                    // Se não preenchido, exibe o conteúdo com "Orienta o resumo"
+                    rows[3].cells[4].innerHTML = `<div class="left-align">Elaboração Conjunta</div>`;
+                }
+                if (materialControlo.trim() !== '') {
+                    // Se preenchido, exibe "Marcação do TPC" seguido pelo conteúdo
+                    rows[3].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador, livro do aluno, ${materialControlo}</div>`;
+                } else {
+                    // Se não preenchido, exibe apenas "Correção dos exercícios;"
+                    rows[3].cells[5].innerHTML = `<div class="left-align">Quadro, giz, apagador e livro do aluno</div>`;
+                }
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+
+            html2canvas(document.body).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210; // Largura em mm para o PDF
+                const pageHeight = 295; // Altura em mm para o PDF
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('plano_de_aula.pdf');
+            });
+        }
+
+
+
+    </script>
+</body>
+</html>

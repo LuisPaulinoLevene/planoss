@@ -1,0 +1,207 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Times New Roman', serif; /* Define a fonte padrão para o corpo do texto como 'Times New Roman' ou uma fonte serifada genérica se não estiver disponível */
+    margin: 0; /* Remove as margens padrão do corpo */
+    padding: 0; /* Remove o padding padrão do corpo */
+    min-height: 100vh; /* Define a altura mínima do corpo para preencher toda a altura da tela */
+    background-color: white; /* Define a cor de fundo do corpo como branca */
+    display: flex; /* Usa o modelo de layout Flexbox */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo dentro do corpo */
+    align-items: center; /* Centraliza verticalmente o conteúdo dentro do corpo */
+    font-size: 12px; /* Define o tamanho da fonte padrão para o corpo como 12px */
+}
+
+.container {
+    width: 100%; /* Define a largura do container como 100% da largura disponível */
+    max-width: 7000px; /* Define a largura máxima do container como 7000px */
+    background: white; /* Define a cor de fundo do container como branca */
+    padding: 5px; /* Define o padding interno do container como 5px */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil ao container */
+    font-size: 13px; /* Define o tamanho da fonte dentro do container como 13px */
+}
+
+.container > * {
+    margin-bottom: 9px; /* Define o espaçamento inferior de todos os elementos diretos filhos do container como 9px */
+}
+
+h1 {
+    text-align: center; /* Alinha o texto dos elementos h1 ao centro */
+}
+
+form {
+    width: 100%; /* Define a largura do formulário como 100% da largura disponível */
+}
+
+.input-container > div {
+    margin: 8px 0; /* Define o espaçamento vertical entre divs dentro do container de input como 8px */
+}
+
+label {
+    display: block; /* Define os labels como blocos para garantir que eles ocupem toda a largura disponível */
+    margin-bottom: 5px; /* Define o espaçamento abaixo de cada label como 5px */
+}
+
+input,
+select,
+button {
+    width: 100%; /* Define a largura dos inputs, selects e botões como 100% da largura disponível */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total do elemento */
+    margin-bottom: 10px; /* Define o espaçamento inferior dos inputs, selects e botões como 10px */
+}
+
+button {
+    padding: 10px; /* Define o padding interno dos botões como 10px */
+    background-color: #007BFF; /* Define a cor de fundo dos botões como azul */
+    color: white; /* Define a cor do texto dos botões como branca */
+    border: none; /* Remove a borda dos botões */
+    cursor: pointer; /* Define o cursor como ponteiro quando passa sobre o botão */
+}
+
+button:hover {
+    background-color: #0056b3; /* Define a cor de fundo dos botões quando o cursor passa sobre eles */
+}
+
+.info-container {
+    display: none; /* Oculta o container de informações */
+    width: 100%; /* Define a largura do container de informações como 100% da largura disponível */
+    margin-bottom: 10px; /* Define o espaçamento inferior do container de informações como 10px */
+    display: flex; /* Usa o modelo de layout Flexbox */
+    justify-content: space-between; /* Distribui o espaço entre os itens filhos do container de informações */
+    flex-wrap: wrap; /* Permite que os itens filhos quebrem para a próxima linha, se necessário */
+}
+
+.info-left,
+.info-right {
+    flex: 1; /* Define que os elementos info-left e info-right crescem igualmente */
+    min-width: 150px; /* Define a largura mínima dos elementos info-left e info-right como 200px */
+    margin: 9px; /* Define o espaçamento externo dos elementos info-left e info-right como 10px */
+}
+
+.info-left div,
+.info-right div {
+    margin-bottom: 9px; /* Define o espaçamento inferior dos divs dentro de info-left e info-right como 10px */
+}
+
+.info-left label,
+.info-right label {
+    font-weight: bold; /* Define o texto dos labels dentro de info-left e info-right como negrito */
+    margin-right: 5px; /* Define o espaçamento à direita dos labels como 5px */
+}
+
+.info-left span,
+.info-right span {
+    display: inline; /* Define que os spans dentro de info-left e info-right devem ser exibidos em linha */
+}
+
+.info-right .objective span {
+    display: block; /* Define que o span dentro de info-right com a classe 'objective' deve ser exibido como bloco */
+    margin-top: 5px; /* Define o espaçamento superior do span com a classe 'objective' como 5px */
+}
+
+.table-container {
+    display: none; /* Oculta o container da tabela */
+    margin-top: 9px; /* Define o espaçamento superior do container da tabela como 10px */
+    overflow-x: auto; /* Permite rolagem horizontal se o conteúdo da tabela ultrapassar a largura do container */
+}
+
+table {
+    width: 100%; /* Define a largura da tabela como 100% da largura disponível */
+    border-collapse: collapse; /* Remove o espaçamento entre as bordas das células da tabela */
+    margin-top: 9px; /* Define o espaçamento superior da tabela como 10px */
+    min-width: 4px; /* Define a largura mínima da tabela como 5px */
+    font-size: 9px; /* Define o tamanho da fonte da tabela como 9px */
+    margin-left: auto; /* Centraliza a tabela horizontalmente */
+    margin-right: auto; /* Centraliza a tabela horizontalmente */
+    border: 1px solid #000; /* Define a borda da tabela como uma linha sólida preta de 1px */
+    line-height: 0.8; /* Define o espaçamento entre linhas da tabela */
+}
+
+th,
+td {
+    border: 1px solid #000; /* Define a borda das células da tabela como uma linha sólida preta de 1px */
+    padding: 8px; /* Define o padding interno das células da tabela como 8px */
+    text-align: center; /* Alinha o texto dentro das células da tabela ao centro */
+    font-size: 13px; /* Define o tamanho da fonte das células da tabela como 8px */
+}
+
+th {
+    background-color: white; /* Define a cor de fundo dos cabeçalhos da tabela como branca */
+}
+
+.left-align {
+    text-align: left; /* Alinha o texto ao lado esquerdo */
+    font-size: 11px /* Define o tamanho de letras dentro de cada celula, algo para nao esquecer quando a tabela corta pdf. Minnha descoberta*/
+
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 8px; /* Define o tamanho da fonte da tabela como 8px em telas menores */
+    }
+
+    th,
+    td {
+        padding: 6px; /* Define o padding interno das células da tabela como 6px em telas menores */
+    }
+}
+
+textarea {
+    width: 100%; /* Define a largura da área de texto como 100% da largura disponível */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total da área de texto */
+    padding: 10px; /* Define o padding interno da área de texto como 10px */
+    border: 1px solid #ccc; /* Define a borda da área de texto como uma linha sólida cinza claro de 1px */
+    border-radius: 4px; /* Define o arredondamento dos cantos da área de texto como 4px */
+    font-size: 14px; /* Define o tamanho da fonte da área de texto como 14px */
+    line-height: 1.5; /* Define o espaçamento entre linhas da área de texto como 1.5 */
+    resize: none; /* Desativa a possibilidade de redimensionar a área de texto */
+    overflow: hidden; /* Oculta qualquer conteúdo que exceda o tamanho da área de texto */
+}
+
+.output {
+    white-space: pre-wrap; /* Preserva quebras de linha e espaços dentro do elemento com a classe 'output' */
+    border: 1px solid #ccc; /* Define a borda do elemento com a classe 'output' como uma linha sólida cinza claro de 1px */
+    padding: 10px; /* Define o padding interno do elemento com a classe 'output' como 10px */
+    border-radius: 4px; /* Define o arredondamento dos cantos do elemento com a classe 'output' como 4px */
+    font-size: 9px; /* Define o tamanho da fonte do elemento com a classe 'output' como 9px */
+    line-height: 1.5; /* Define o espaçamento entre linhas do elemento com a classe 'output' como 1.5 */
+    background-color: #f9f9f9; /* Define a cor de fundo do elemento com a classe 'output' como um cinza claro */
+    margin-top: 10px; /* Define o espaçamento superior do elemento com a classe 'output' como 10px */
+}
+
+/* Estilos específicos para impressão */
+@media print {
+    body {
+        margin: 0; /* Remove as margens do corpo para a impressão */
+        padding: 0; /* Remove o padding do corpo para a impressão */
+        font-size: 8px; /* Define o tamanho da fonte para o corpo como 8px para impressão */
+    }
+
+    .container {
+        padding: 9px; /* Ajusta o padding interno do container para impressão */
+        box-shadow: none; /* Remove a sombra do container para uma aparência mais limpa na impressão */
+    }
+
+    table {
+        width: 100%; /* Define a largura da tabela como 100% da largura disponível para a impressão */
+        font-size: 9px; /* Define o tamanho da fonte da tabela como 9px para a impressão */
+        border: 1px solid #000; /* Define a borda da tabela como uma linha sólida preta de 1px para a impressão */
+    }
+
+    th,
+    td {
+        padding: 3px; /* Reduz o padding interno das células da tabela para impressão */
+        font-size: 9px; /* Define o tamanho da fonte das células da tabela como 9px para impressão */
+    }
+
+    @page {
+        margin: 10mm; /* Define as margens da página para impressão como 10mm */
+    }
+
+    .no-print {
+        display: none; /* Oculta elementos com a classe 'no-print' na impressão */
+    }
+}

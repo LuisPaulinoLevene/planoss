@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .unauthorized {
+            color: red;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .insertDateField {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .insertDateField button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            table {
+                font-size: 14px;
+            }
+        }
+
+        /* Estilo para os links de inserir data e cadastro manual */
+        .admin-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .admin-links a {
+            margin: 0 15px;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Estilo para a mensagem de cópia */
+        .copy-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            border-radius: 5px;
+            display: none;
+        }
+
+        /* Estilo para os IDs clicáveis */
+        .copyable {
+            color: #007bff;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .copyable:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Página de Administrador</h1>
+        <div id="adminContent">
+            <!-- O conteúdo será carregado aqui -->
+        </div>
+    </div>
+
+    <!-- Div para a mensagem de cópia -->
+    <div id="copyMessage" class="copy-message">
+        ID copiado!
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configurações do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // Função para verificar o estado de autenticação e se o usuário é admin
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("Usuário não logado. Redirecionando para index.html.");
+                window.location.href = "./index.html";  // Redireciona se o usuário não estiver logado
+            } else {
+                console.log("Usuário logado:", user.email);
+                checkIfAdmin(user);  // Verifica se o usuário é admin
+            }
+        });
+
+        // Função para verificar se o usuário tem o campo 'admin' no Firestore
+        async function checkIfAdmin(user) {
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+
+                // Verifica se o campo 'admin' existe e é verdadeiro
+                if (userData.admin) {
+                    loadUsersData();  // Carrega e exibe a tabela com dados de usuários
+                } else {
+                    showUnauthorizedMessage();  // Exibe mensagem de não autorizado
+                }
+            } else {
+                console.error("Erro: Usuário não encontrado no Firestore.");
+            }
+        }
+
+        // Função para carregar os dados dos usuários e exibir na tabela
+        async function loadUsersData() {
+            const usersRef = collection(db, "users");
+            const querySnapshot = await getDocs(usersRef);
+
+            let totalUsers = 0;  // Contador para total de usuários
+            let totalInPrazo = 0;  // Contador para usuários com datas em prazo
+            let tableContent = `
+                <table id="userTable">
+                    <thead>
+                        <tr>
+                            <th>ID do Documento</th>
+                            <th>Nome</th>
+                            <th>Data de Expiração</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+                const userName = userData.name;
+                const expirationDate = userData.date || "Data não definida";  // Exibe a data como vem no Firestore
+
+                let expirationStatus = expirationDate;  // Exibe a data de expiração sem formatação
+
+                // Função para converter a string dd/mm/yyyy para um objeto Date
+                function convertToDate(dateString) {
+                    const [day, month, year] = dateString.split('/');
+                    return new Date(`${month}/${day}/${year}`);
+                }
+
+                // Verifica se a data está no prazo e ajusta a exibição
+                if (expirationDate !== "Data não definida" && expirationDate !== "") {
+                    const currentDate = new Date();
+                    const expiration = convertToDate(expirationDate);  // Converte a data de expiração para um objeto Date
+
+                    if (isNaN(expiration)) {
+                        // Se a data de expiração não for válida
+                        expirationStatus = "Data inválida";
+                    } else {
+                        if (expiration < currentDate) {
+                            expirationStatus = `Plano expirado em: ${expirationDate}`;
+                        } else {
+                            totalInPrazo++;  // Incrementa o contador se a data estiver dentro do prazo
+                            expirationStatus = `Plano válido até: ${expirationDate}`;
+                        }
+                    }
+                }
+
+                tableContent += `
+                    <tr>
+                        <td class="copyable" data-id="${doc.id}">${doc.id}</td>
+                        <td>${userName}</td>
+                        <td>${expirationStatus}</td>
+                    </tr>
+                `;
+
+                totalUsers++;  // Incrementa o contador de total de usuários
+            });
+
+            tableContent += `</tbody></table>`;
+
+            // Insere os totais antes da tabela
+            const totalContent = `
+                <p><strong>Total de usuários existentes: </strong><span id="totalUsers">${totalUsers}</span></p>
+                <p><strong>Total de usuários com datas em prazo: </strong><span id="totalInPrazo">${totalInPrazo}</span></p>
+            `;
+
+            // Insere os links e os totais depois da tabela
+            const adminLinks = `
+                <div class="admin-links">
+                    <a href="admin2.html">Atendimentos diversos</a>
+                </div>
+            `;
+
+            // Insere tudo: totais, links e tabela
+            const adminContentDiv = document.getElementById("adminContent");
+            adminContentDiv.innerHTML = totalContent + adminLinks + tableContent;
+
+            // Adiciona evento de clique nas células de ID
+            const copyableCells = document.querySelectorAll('.copyable');
+            copyableCells.forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const id = cell.getAttribute('data-id');
+                    navigator.clipboard.writeText(id).then(() => {
+                        showCopyMessage();
+                    }).catch(err => {
+                        console.error('Erro ao copiar o ID: ', err);
+                    });
+                });
+            });
+        }
+
+        // Função para exibir a mensagem "Não autorizado!" se o usuário não for admin
+        function showUnauthorizedMessage() {
+            const adminContentDiv = document.getElementById("adminContent");
+            adminContentDiv.innerHTML = "<h2 class='unauthorized'>Não autorizado! Você não é administrador. Obrigado</h2>";
+        }
+
+        // Função para exibir a mensagem de cópia
+        function showCopyMessage() {
+            const copyMessageDiv = document.getElementById('copyMessage');
+            copyMessageDiv.style.display = 'block';
+            setTimeout(() => {
+                copyMessageDiv.style.display = 'none';
+            }, 2000);  // A mensagem desaparece após 2 segundos
+        }
+    </script>
+</body>
+</html>
