@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - Escolha o Método</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: white;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none; /* Inicialmente escondido */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+        .processing-message {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Estilo para os links dentro da form-group */
+        .form-group a {
+            display: block; /* Faz os links ocuparem toda a largura e ficarem um abaixo do outro */
+            margin-bottom: 10px; /* Espaçamento entre os links */
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensagem de "Processando" visível inicialmente -->
+    <div class="processing-message" id="processing-message">
+        Processando...
+    </div>
+
+    <!-- Formulário e outros elementos ocultos inicialmente -->
+    <div class="container" id="payment-container">
+        <h2 style="text-align: center; color: black;">Para ajudar o desenvolvimento do nosso projecto plano automático, escolha um plano de pagamento:</h2>
+
+        <form id="payment-form">
+
+            <div class="form-group">
+                <a href="pagamento1.html" style="color: blue; text-decoration: underline; cursor: pointer;">
+                    Plano mensal: 50,00MT para 30 dias
+                </a>
+            </div>
+            <div class="form-group">
+                <a href="pagamento2.html" style="color: blue; text-decoration: underline; cursor: pointer;">
+                    Plano anual: 500,00MT para 365 dias
+                </a>
+            </div>
+            <div class="form-group">
+                <a href="pagamento4.html" style="color: blue; text-decoration: underline; cursor: pointer;">
+                    Plano Infinito: 2000,00MT para vitalicio
+                </a>
+            </div>
+            <div class="logout">
+            <a href="logout.html"style="text-decoration: underline;">Terminar sessão</a>
+            </div>
+            <p class="message" id="error-message" style="display: none;">Erro ao processar pagamento. Tente novamente.</p>
+            <p class="message" id="wait-message" style="display: none;">Aguarde pela solicitação do PIN no seu celular e insira-o para confirmar o pagamento.</p>
+        </form>
+    </div>
+
+    <script type="module">
+        // Espera 3 segundos para esconder "Processando"
+        setTimeout(function() {
+            document.getElementById('processing-message').style.display = 'none';  // Esconde a mensagem "Processando"
+        }, 1000);
+
+        // Espera 4 segundos para exibir o formulário
+        setTimeout(function() {
+            document.getElementById('payment-container').style.display = 'block';  // Exibe o formulário
+        }, 4000);
+
+        // Importando Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configurações do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializando o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // Função para verificar se o usuário está logado
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("Usuário não logado. Redirecionando para index.html.");
+                window.location.href = "./index.html";  // Corrigido o caminho para o GitHub Pages
+            } else {
+                console.log("Usuário logado:", user.email);
+                checkExpirationDate(user);
+            }
+        });
+
+        // Função para verificar a data de expiração do usuário
+        async function checkExpirationDate(user) {
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                const currentDate = new Date().toISOString().split('T')[0]; // Pega a data atual no formato 'YYYY-MM-DD'
+
+                // A data de expiração vinda do Firestore no formato 'DD/MM/YYYY'
+                const expirationDate = userData.date;
+
+                // Converte a data de expiração para o formato 'YYYY-MM-DD'
+                const [day, month, year] = expirationDate.split('/');
+                const formattedExpirationDate = `${year}-${month}-${day}`;
+
+                // Comparar as duas datas no formato 'YYYY-MM-DD'
+                if (formattedExpirationDate > currentDate) {
+                    window.location.href = "./homel.html";  // Redireciona para home.html se a data de expiração for válida
+                } else {
+                    document.getElementById("payment-container").style.display = "block";  // Exibe o formulário
+                }
+            } else {
+                console.error("Erro: Usuário não encontrado no Firestore.");
+            }
+        }
+    </script>
+</body>
+</html>

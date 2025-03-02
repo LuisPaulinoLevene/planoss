@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - Escolha o Método</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: white;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none; /* Inicialmente escondido */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+        .processing-message {
+            font-size: 24px;
+            color: white;
+        }
+        .copy-number {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .copy-notification {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none; /* Inicialmente escondido */
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensagem de "Processando" visível inicialmente -->
+    <div class="processing-message" id="processing-message">
+        Processando...
+    </div>
+
+    <!-- Formulário e outros elementos ocultos inicialmente -->
+    <div class="container" id="payment-container">
+        <h2 style="text-align: center; color: black;">Escolha o método de pagamento:</h2>
+
+        <form id="payment-form">
+
+            <!-- Links de pagamento -->
+            <div class="form-group" id="emola-link">
+                <!-- O link de Emola será inserido aqui -->
+            </div>
+
+            <div class="form-group" id="mpesa-link">
+                <!-- O link de Mpesa será inserido aqui -->
+            </div>
+            <p class="message" id="error-message" style="display: none;">Erro ao processar pagamento. Tente novamente.</p>
+            <p class="message" id="wait-message" style="display: none;">Aguarde pela solicitação do PIN no seu celular e insira-o para confirmar o pagamento.</p>
+        </form>
+    </div>
+
+    <script type="module">
+        // Espera 3 segundos para esconder "Processando"
+        setTimeout(function() {
+            document.getElementById('processing-message').style.display = 'none';  // Esconde a mensagem "Processando"
+        }, 1000);
+
+        // Espera 4 segundos para exibir o formulário
+        setTimeout(function() {
+            document.getElementById('payment-container').style.display = 'block';  // Exibe o formulário
+        }, 4000);
+
+        // Importando Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configurações do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        // Inicializando o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        // Função para verificar se o usuário está logado
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("Usuário não logado. Redirecionando para index.html.");
+                window.location.href = "./index.html";  // Corrigido o caminho para o GitHub Pages
+            } else {
+                console.log("Usuário logado:", user.email);
+                checkExpirationDate(user);
+            }
+        });
+
+        // Função para verificar os campos "emola" e "mpesa" no Firestore
+        async function checkExpirationDate(user) {
+            try {
+                const docRef = doc(db, "users", "gW1fMwZXuzgnk907ZlfVigYphDw1"); // Alterado para a coleção "users"
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Verifica o status de "emola"
+                    const emolaStatus = data.emola;
+                    const emolaLink = document.getElementById('emola-link');
+                    if (emolaStatus === 'activo') {
+                        emolaLink.innerHTML = '<a href="emola_infinito.html" style="color: blue; text-decoration: underline; cursor: pointer;">Emola</a>';
+                    } else if (emolaStatus === 'desactivo') {
+                        emolaLink.innerHTML = '<p style="color: red;">Emola indisponível</p>';
+                    }
+
+                    // Verifica o status de "mpesa"
+                    const mpesaStatus = data.mpesa;
+                    const mpesaLink = document.getElementById('mpesa-link');
+                    if (mpesaStatus === 'activo') {
+                        mpesaLink.innerHTML = '<a href="mpesa_infinito.html" style="color: blue; text-decoration: underline; cursor: pointer;">Mpesa</a>';
+                    } else if (mpesaStatus === 'desactivo') {
+                        mpesaLink.innerHTML = '<p style="color: red;">Mpesa indisponível</p>';
+                    }
+                } else {
+                    console.log("Documento não encontrado!");
+                }
+            } catch (error) {
+                console.error("Erro ao buscar o documento:", error);
+            }
+        }
+    </script>
+</body>
+</html>

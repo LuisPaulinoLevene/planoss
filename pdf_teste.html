@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de aula com apontamentos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="pdf_teste.css">
+    <script src="pdf_teste.js" defer></script>    
+</head>
+<body>
+    <div class="container">
+        <h1>Crie o seu plano de aula anexando apontamentos</h1>
+        <p>Carregue o seu plano de aula em PDF que pretende anexar os apontamentos e clique no botão CARREGAR O PLANO DE AULA. (N.B.: O PDF deve ter somente 1 página)</p>
+
+        <div class="input-group">
+            <input type="file" id="additional-pdf-input" accept="application/pdf">
+            <button id="process-additional-pdf">Carregar o plano de aula</button>
+        </div>
+
+        <p>Carregue o seu manual em PDF, clique no botão VISUALIZAR AS PÁGINAS e marque o quadradinho abaixo da página que contém os seus apontamentos.</p>
+
+        <div class="input-group">
+            <input type="file" id="pdf-input" accept="application/pdf">
+            <button id="process-pdf">Visualizar as páginas</button>
+        </div>
+
+        <p>Carregue uma  ou PDF que deseja anexar ao documento final:</p>
+
+        <div class="input-group">
+            <input type="file" id="image-input" accept="image/*,application/pdf" multiple>
+            <button id="process-images">Carregar imagens</button>
+        </div>
+
+        <p>Depois de seguir corretamente os passos acima, clique no botão a seguir:</p>
+
+        <div class="button-group">
+            <button id="save-pdf">Salvar plano com apontamentos</button>
+        </div>
+
+        <div id="pdf-pages"></div>
+    </div>
+</body>
+</html>
