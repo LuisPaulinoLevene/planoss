@@ -223,15 +223,20 @@
 
                     if (isNaN(expiration)) {
                         // Se a data de expiração não for válida
-                        expirationStatus = "Data inválida";
+                        expirationStatus = "INFINITO";
+                        totalInPrazo++;  // Inclui como dentro do prazo, mesmo sendo "data inválida"
                     } else {
                         if (expiration < currentDate) {
                             expirationStatus = `Plano expirado em: ${expirationDate}`;
+                            // Não conta como dentro do prazo
                         } else {
                             totalInPrazo++;  // Incrementa o contador se a data estiver dentro do prazo
                             expirationStatus = `Plano válido até: ${expirationDate}`;
                         }
                     }
+                } else {
+                    expirationStatus = "Data não definida";
+                    // Não incrementa o total de dentro do prazo se a data for "não definida"
                 }
 
                 tableContent += `
