@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Request Form</title>
+</head>
+<body>
+    <h1>Submit Payment Request</h1>
+    <form id="paymentForm">
+        <label for="numero">Numero:</label>
+        <input type="text" id="numero" name="numero" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get the 'numero' value from the input
+            const numero = document.getElementById('numero').value;
+
+            // Prepare the data for the API request
+            const data = {
+                "carteira": "1724330415881x796026612740522000",
+                "numero": numero,
+                "quem comprou": "Luis",
+                "valor": "15"
+            };
+
+            // Send the POST request to the API
+            fetch('https://mozpayment.co.mz/api/1.1/wf/pagamentorotativoemola', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Request was successful!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error with the request!');
+            });
+        });
+    </script>
+</body>
+</html>

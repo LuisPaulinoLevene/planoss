@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Bonito</title>
+    <link rel="stylesheet" href="tecnicas_p.css">
+    <script src="Tecnicas_p.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Plano gerado</h1>
+        <div id="formulario">
+            <div class="form-group">
+              <h1>Formulario de plano de aula</h1>
+                <label for="estrategias1">Escolha a estratégia para introdução e motivação:</label>
+                <select id="estrategias1" name="estrategias1"></select>
+                <label for="atividades_professor1">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor1" name="atividades_professor1" readonly>
+                <label for="atividades_aluno1">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno1" name="atividades_aluno1" readonly>
+                <label for="conteudo1">Conteudo:</label>
+                <input type="text" id="conteudo1" name="conteudo1" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias2">Escolha a estratégia para mediação e assimilação:</label>
+                <select id="estrategias2" name="estrategias2"></select>
+                <label for="atividades_professor2">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor2" name="atividades_professor2" readonly>
+                <label for="atividades_aluno2">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno2" name="atividades_aluno2" readonly>
+                <label for="conteudo2">Conteudo:</label>
+                <input type="text" id="conteudo2" name="conteudo2" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias3">Escolha a estratégia para domínio e consolidação:</label>
+                <select id="estrategias3" name="estrategias3"></select>
+                <label for="atividades_professor3">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor3" name="atividades_professor3" readonly>
+                <label for="atividades_aluno3">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno3" name="atividades_aluno3" readonly>
+                <label for="conteudo3">Conteudo:</label>
+                <input type="text" id="conteudo3" name="conteudo3" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estrategias4">Escolha a estratégia para controle e avaliação:</label>
+                <select id="estrategias4" name="estrategias4"></select>
+                <label for="atividades_professor4">Atividades (Professor):</label>
+                <input type="text" id="atividades_professor4" name="atividades_professor4" readonly>
+                <label for="atividades_aluno4">Atividades (Aluno):</label>
+                <input type="text" id="atividades_aluno4" name="atividades_aluno4" readonly>
+                <label for="conteudo4">Conteudo:</label>
+                <input type="text" id="conteudo4" name="conteudo4" readonly>
+            </div>
+            <button type="submit" id="enviar">Enviar</button>
+        </div>
+
+        <!-- Tabela que será exibida após o envio do formulário -->
+        <table id="tabelaPlanoAula">
+          <thead>
+              <tr>
+                  <th rowspan="2">Tempo</th>
+                  <th rowspan="2">Função Didática</th>
+                  <th rowspan="2">Conteúdo</th>
+                  <th colspan="2">Atividades</th>
+                  <th rowspan="2">Técnicas/Sugestões Metodológicas</th>
+                  <th rowspan="2">Meios auxiliares</th>
+                  <th rowspan="2">Observações</th>
+              </tr>
+              <tr>
+                  <th>Professor</th>
+                  <th>Aluno</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td></td>
+                  <td>Introdução e Motivação</td>
+                  <td></td>
+                  <td id="professor1"></td>
+                  <td id="aluno1"></td>
+                  <td id="tecnica1"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Medição e Assimilação</td>
+                  <td></td>
+                  <td id="professor2"></td>
+                  <td id="aluno2"></td>
+                  <td id="tecnica2"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Domínio e Consolidação</td>
+                  <td></td>
+                  <td id="professor3"></td>
+                  <td id="aluno3"></td>
+                  <td id="tecnica3"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>Controle e Avaliação</td>
+                  <td></td>
+                  <td id="professor4"></td>
+                  <td id="aluno4"></td>
+                  <td id="tecnica4"></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+          </tbody>
+      </table>
+        <button id="salvarPDF">Salvar PDF</button>
+    </div>
+</body>
+</html>

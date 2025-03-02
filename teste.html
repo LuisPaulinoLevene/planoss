@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('fundo.jfif');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        #app {
+            height: 100%;
+            display: flex;
+            background-image: url('fundo.jfif');
+            flex-direction: column;
+            border-radius: 5px;
+            position: relative;
+            padding: 0;
+        }
+
+        #chat-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 10px;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 75%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sent {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            text-align: left;
+        }
+
+        .received {
+            background-color: #ffffff;
+            border: 1px solid #dedede;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .message-user {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .message-time {
+            font-size: 0.7em;
+            color: gray;
+            text-align: right;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .remove-icon {
+            font-size: 1.5em;
+            color: red;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+            line-height: 0;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #fff;
+        }
+
+        textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            height: 40px;
+        }
+
+        .send-icon {
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 10px;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, orderBy, query, onSnapshot, where, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjR7ByKvIFDoF61CL5u2SmYjZ2SOqGd4I",
+            authDomain: "planoautomatico.firebaseapp.com",
+            projectId: "planoautomatico",
+            storageBucket: "planoautomatico.appspot.com",
+            messagingSenderId: "474178177133",
+            appId: "1:474178177133:web:452243accf7de0548b9764",
+            measurementId: "G-7GZFKCREKH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('message');
+        const sendIcon = document.getElementById('send-icon');
+        const loadingDiv = document.getElementById('loading');
+
+        const messagesArray = [];
+
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                window.location.href = "index.html";
+            } else {
+                loadMessages();
+                listenForNewMessages();
+            }
+        });
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp.seconds * 1000);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+            return date.toLocaleString('pt-BR', options);
+        }
+
+        async function getUserName(email) {
+            const userRef = collection(db, "users");
+            const userQuery = query(userRef, where("email", "==", email));
+            const userSnapshot = await getDocs(userQuery);
+            return userSnapshot.empty ? null : userSnapshot.docs[0].data().name || null;
+        }
+
+        async function loadMessages() {
+            loadingDiv.style.display = 'block';
+            sendIcon.style.display = 'none';
+
+            const messagesRef = collection(db, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
+
+            const snapshot = await getDocs(q);
+            const fragment = document.createDocumentFragment();
+
+            for (const doc of snapshot.docs) {
+                const msg = doc.data();
+                const userName = await getUserName(msg.email);
+                const time = msg.timestamp ? formatDate(msg.timestamp) : '';
+
+                messagesArray.push({ id: doc.id, ...msg, userName: userName || 'Usuário Anônimo', time });
+
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${msg.email === auth.currentUser.email ? 'sent' : 'received'}`;
+                msgDiv.setAttribute('data-id', doc.id);
+                msgDiv.innerHTML = `
+                    <div class="message-user">${userName || 'Usuário Anônimo'}</div>
+                    <div>${msg.text}</div>
+                    <div class="message-time">${time}<span class="remove-icon" style="display: ${msg.email === auth.currentUser.email ? 'inline' : 'none'};" onclick="removeMessage('${doc.id}', this)">X</span></div>
+                `;
+                fragment.appendChild(msgDiv);
+            }
+
+            messagesDiv.appendChild(fragment);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+
+            await limitMessages();
+
+            loadingDiv.style.display = 'none';
+            sendIcon.style.display = 'block';
+        }
+
+        async function limitMessages() {
+            const messagesRef = collection(db, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
+
+            const snapshot = await getDocs(q);
+            if (snapshot.docs.length > 20) {
+                const messagesToDelete = snapshot.docs.slice(0, snapshot.docs.length - 20);
+                const deletePromises = messagesToDelete.map(async (doc) => {
+                    await deleteDoc(doc.ref);
+                });
+                await Promise.all(deletePromises);
+            }
+        }
+
+        function listenForNewMessages() {
+            const messagesRef = collection(db, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
+
+            onSnapshot(q, async snapshot => {
+                const fragment = document.createDocumentFragment();
+
+                for (const change of snapshot.docChanges()) {
+                    if (change.type === "added") {
+                        const msg = change.doc.data();
+                        const userName = await getUserName(msg.email);
+                        const time = msg.timestamp ? formatDate(msg.timestamp) : '';
+
+                        messagesArray.push({ id: change.doc.id, ...msg, userName: userName || 'Usuário Anônimo', time });
+
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = `message ${msg.email === auth.currentUser.email ? 'sent' : 'received'}`;
+                        msgDiv.setAttribute('data-id', change.doc.id);
+                        msgDiv.innerHTML = `
+                            <div class="message-user">${userName || 'Usuário Anônimo'}</div>
+                            <div>${msg.text}</div>
+                            <div class="message-time">${time}<span class="remove-icon" style="display: ${msg.email === auth.currentUser.email ? 'inline' : 'none'};" onclick="removeMessage('${change.doc.id}', this)">X</span></div>
+                        `;
+                        fragment.appendChild(msgDiv);
+                    } else if (change.type === "removed") {
+                        const msgDiv = document.querySelector(`.message[data-id='${change.doc.id}']`);
+                        if (msgDiv) {
+                            msgDiv.remove();
+                        }
+
+                        const msgIndex = messagesArray.findIndex(msg => msg.id === change.doc.id);
+                        if (msgIndex !== -1) {
+                            messagesArray.splice(msgIndex, 1);
+                        }
+                    }
+                }
+
+                messagesDiv.appendChild(fragment);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+
+                await limitMessages();
+            });
+        }
+
+        sendIcon.onclick = async () => {
+            const message = messageInput.value.trim();
+            const user = auth.currentUser;
+
+            if (user) {
+                const userName = await getUserName(user.email);
+                if (!userName) {
+                    alert("Por favor, adicione seu nome antes de enviar mensagens.");
+                    window.location.href = "nome.html"; 
+                    return;
+                }
+
+                if (message) {
+                    const timestamp = { seconds: Math.floor(Date.now() / 1000) };
+
+                    sendIcon.classList.add('disabled');
+                    sendIcon.setAttribute('disabled', 'true');
+
+                    const docRef = await addDoc(collection(db, "messages"), {
+                        text: message,
+                        email: user.email,
+                        timestamp
+                    });
+
+                    messagesArray.push({ id: docRef.id, text: message, email: user.email, timestamp });
+
+                    messageInput.value = "";
+
+                    sendIcon.classList.remove('disabled');
+                    sendIcon.removeAttribute('disabled');
+
+                    await limitMessages();
+                }
+            }
+        };
+
+        window.removeMessage = async (id, element) => {
+            const user = auth.currentUser;
+            if (user) {
+                const msgRef = doc(db, "messages", id);
+                const msgSnapshot = await getDoc(msgRef);
+                if (msgSnapshot.exists() && msgSnapshot.data().email === user.email) {
+                    await deleteDoc(msgRef);
+                    // A remoção da interface é gerenciada pelo onSnapshot
+                } else {
+                    alert("Você não tem permissão para remover esta mensagem.");
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div id="chat-section">
+            <div id="loading">Carregando mensagens, aguarde...</div>
+            <div id="messages"></div>
+            <div class="input-container">
+                <textarea id="message" placeholder="Digite sua mensagem..."></textarea>
+                <img id="send-icon" class="send-icon" src="send.jpg" alt="Enviar">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
